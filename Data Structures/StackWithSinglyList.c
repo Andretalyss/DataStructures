@@ -22,10 +22,8 @@ void initialize(List *n){
 
 void push(List *n, int value){
     NodeOfPile *new = (NodeOfPile*) malloc(sizeof(NodeOfPile));
-    //printf("Entrou1\n");
 
     if(n->head == NULL){
-        //printf("Entrou\n");
         n->head = new;
         n->tail = new;
         new->next = NULL;
@@ -33,7 +31,7 @@ void push(List *n, int value){
         n->size++;
 
     }else{
-        //printf("Entrou2\n");
+
         new->next = n->tail;
         n->tail = new;
         new->value = value;
@@ -42,28 +40,31 @@ void push(List *n, int value){
 }
 
 void print(List *p){
-    if(p->tail){
-        printf(" ---  TOP OF PILE ---\n\n");
+    
+    if(p->size == 0){
+        printf("Empty Pile\n");
+    }
+    else if(p->tail){
+        printf("\n\n ---  TOP OF PILE ---\n\n");
         while(p->tail){
         printf("     ---  %d  --- \n", p->tail->value);
         p->tail = p->tail->next;
     }
-        printf("\n --- FLOOR OF PILE ---\n");
-    }else{
-        printf("Empty Pile\n");
-    }
+        printf("\n --- FLOOR OF PILE ---\n\n\n");
     
-}
+    
+}}
 
 int pop(List *n){   
     NodeOfPile *remov;
-
+    
     if(n->size == 0)
         return 0;
-
+    
     remov = n->tail;
-    n->tail = n->tail->next;
-   
+    if(n->size > 1)
+        n->tail = n->tail->next;
+    
     free(remov);
     n->size--;
    
@@ -71,35 +72,39 @@ int pop(List *n){
 }
 
 int main(int argc, char*argv[]){
-
+    char choice;
     List* p;
     p = (List*) malloc(sizeof(List));
     initialize(p);
 
     printf("What's your choice?\n");
-    printf("[1]Add {push} or [0]Remove {pop} -> ");  
 
-    int choice;
-    scanf("%d", &choice);
+    do{  
+        printf("\e[H\e[2J");
+        printf("[1]Add {push} or [0]Remove {pop} or any for print -> ");  
+        scanf("%s", &choice);
+        if(choice != '1' && choice != '0')
+            break;
 
-    if(choice){
-        for(int i=0;i<6;i++){
-        printf("Enter with the value: ");
-        int value;
-        scanf("%d", &value);
-        push(p, value);
-     }}
+        if(choice){
+            printf("Enter with the value: ");
+            int value;
+            scanf("%d", &value);
+            push(p, value);
 
-    
-    int aux = pop(p);
-    if(aux)
-        printf("\n~> The last add was deleted <~\n\n");
-    else{
-        printf("Empty Pile\n");
-        return 0;
-    }
-    
+        }else{
+            int aux = pop(p);
+            if(aux){
+                printf("\n~> The last add was deleted <~\n\n");
+            }else{
+                printf("Empty Pile\n");
+                return 0;
+        
+        }}}while(1);
+
+    printf("Consult Pile:\n");
     print(p);
+        
 
     return 0;
 }
